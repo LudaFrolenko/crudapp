@@ -2,9 +2,11 @@ package com.example.crudapp.controller;
 
 import com.example.crudapp.model.User;
 import com.example.crudapp.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +34,10 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(User user) {
+    public String saveUser(@Valid User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "userForm";
+        }
         userService.saveUser(user);
         return "redirect:/users";
     }
